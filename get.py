@@ -17,7 +17,6 @@ def _get(url: str):
     response = requests.get(
         f"{settings.SCHOLAR_BASE_URL}{url}",
         headers=headers,
-        verify=False,
     )
     response.encoding = "utf-8"
     return response.json()
