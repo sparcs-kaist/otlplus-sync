@@ -50,54 +50,66 @@ def save_log(filetype, data):
 
 
 for year, semester in semesters:
-    lectures = get.get_lecture_type(lecture_year=year, lecture_term=semester)
-    charges = get.get_charge_type(lecture_year=year, lecture_term=semester)
+    try:
+        lectures = get.get_lecture_type(lecture_year=year, lecture_term=semester)
+        charges = get.get_charge_type(lecture_year=year, lecture_term=semester)
 
-    result = requests.post(
-        f"{settings.OTLPLUS_BASE_URL}/scholarDB",
-        json={
-            "year": year,
-            "semester": semester,
-            "lectures": lectures,
-            "charges": charges,
-        },
-        headers=headers,
-    ).json()
+        result = requests.post(
+            f"{settings.OTLPLUS_BASE_URL}/scholarDB",
+            json={
+                "year": year,
+                "semester": semester,
+                "lectures": lectures,
+                "charges": charges,
+            },
+            headers=headers,
+        ).json()
 
-    save_log(f"{year}-{semester}_scholarDB", result)
+        save_log(f"{year}-{semester}_scholarDB", result)
+    except Exception as e:
+        print(e)
 
-    classtimes = get.get_time_type(lecture_year=year, lecture_term=semester)
-    for classtime in classtimes:
-        teaching = classtime["room_k_name"]
-        classtime["room_k_name"] = classtime["room_e_name"]
-        classtime["room_e_name"] = classtime["teaching"]
-        classtime["teaching"] = teaching
+    try:
+        classtimes = get.get_time_type(lecture_year=year, lecture_term=semester)
+        for classtime in classtimes:
+            teaching = classtime["room_k_name"]
+            classtime["room_k_name"] = classtime["room_e_name"]
+            classtime["room_e_name"] = classtime["teaching"]
+            classtime["teaching"] = teaching
 
-    result = requests.post(
-        f"{settings.OTLPLUS_BASE_URL}/classtime",
-        json={"year": year, "semester": semester, "classtimes": classtimes},
-        headers=headers,
-    ).json()
+        result = requests.post(
+            f"{settings.OTLPLUS_BASE_URL}/classtime",
+            json={"year": year, "semester": semester, "classtimes": classtimes},
+            headers=headers,
+        ).json()
 
-    save_log(f"{year}-{semester}_classtime", result)
+        save_log(f"{year}-{semester}_classtime", result)
+    except Exception as e:
+        print(e)
 
-    examtimes = get.get_exam_time_type(lecture_year=year, lecture_term=semester)
+    try:
+        examtimes = get.get_exam_time_type(lecture_year=year, lecture_term=semester)
 
-    result = requests.post(
-        f"{settings.OTLPLUS_BASE_URL}/examtime",
-        json={"year": year, "semester": semester, "examtimes": examtimes},
-        headers=headers,
-    ).json()
+        result = requests.post(
+            f"{settings.OTLPLUS_BASE_URL}/examtime",
+            json={"year": year, "semester": semester, "examtimes": examtimes},
+            headers=headers,
+        ).json()
 
-    save_log(f"{year}-{semester}_examtime", result)
+        save_log(f"{year}-{semester}_examtime", result)
+    except Exception as e:
+        print(e)
 
 for year, semester in semesters:
-    attend = get.get_attend_type(lecture_year=year, lecture_term=semester)
+    try:
+        attend = get.get_attend_type(lecture_year=year, lecture_term=semester)
 
-    result = requests.post(
-        f"{settings.OTLPLUS_BASE_URL}/takenLecture",
-        json={"year": year, "semester": semester, "attend": attend},
-        headers=headers,
-    ).json()
+        result = requests.post(
+            f"{settings.OTLPLUS_BASE_URL}/takenLecture",
+            json={"year": year, "semester": semester, "attend": attend},
+            headers=headers,
+        ).json()
 
-    save_log(f"{year}-{semester}_takenLecture", result)
+        save_log(f"{year}-{semester}_takenLecture", result)
+    except Exception as e:
+        print(e)
