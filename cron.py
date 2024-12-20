@@ -2,9 +2,12 @@ import requests
 import json
 from datetime import datetime
 import os
+from pathlib import Path
 
 import get
 import settings
+
+current_dir = Path(__file__).parent
 
 headers = {"x-api-key": settings.OTLPLUS_API_KEY}
 
@@ -38,7 +41,7 @@ def save_log(filetype, data):
 
     num = 0
     while True:
-        filename = f"logs/{date_str}_{filetype}_{num}.log"
+        filename = f"{current_dir}/logs/{date_str}_{filetype}_{num}.log"
         if not os.path.exists(filename):
             break
         num += 1
