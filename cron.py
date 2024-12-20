@@ -15,7 +15,6 @@ result = requests.get(
 ).json()
 semesters = [(result["year"], result["semester"])]
 
-
 def put_previous_semester(semesters, count):
     if count == 0:
         return
@@ -63,11 +62,13 @@ for year, semester in semesters:
                 "charges": charges,
             },
             headers=headers,
-        ).json()
+        )
 
-        save_log(f"{year}-{semester}_scholarDB", result)
+        save_log(f"{year}-{semester}_scholarDB", result.json())
     except Exception as e:
         print(e)
+        print(result)
+        print(result.text)
 
     try:
         classtimes = get.get_time_type(lecture_year=year, lecture_term=semester)
@@ -81,11 +82,13 @@ for year, semester in semesters:
             f"{settings.OTLPLUS_BASE_URL}/classtime",
             json={"year": year, "semester": semester, "classtimes": classtimes},
             headers=headers,
-        ).json()
+        )
 
-        save_log(f"{year}-{semester}_classtime", result)
+        save_log(f"{year}-{semester}_classtime", result.json())
     except Exception as e:
         print(e)
+        print(result)
+        print(result.text)
 
     try:
         examtimes = get.get_exam_time_type(lecture_year=year, lecture_term=semester)
@@ -94,11 +97,13 @@ for year, semester in semesters:
             f"{settings.OTLPLUS_BASE_URL}/examtime",
             json={"year": year, "semester": semester, "examtimes": examtimes},
             headers=headers,
-        ).json()
+        )
 
-        save_log(f"{year}-{semester}_examtime", result)
+        save_log(f"{year}-{semester}_examtime", result.json())
     except Exception as e:
         print(e)
+        print(result)
+        print(result.text)
 
 for year, semester in semesters:
     try:
@@ -108,8 +113,10 @@ for year, semester in semesters:
             f"{settings.OTLPLUS_BASE_URL}/takenLecture",
             json={"year": year, "semester": semester, "attend": attend},
             headers=headers,
-        ).json()
+        )
 
-        save_log(f"{year}-{semester}_takenLecture", result)
+        save_log(f"{year}-{semester}_takenLecture", result.json())
     except Exception as e:
         print(e)
+        print(result)
+        print(result.text)
