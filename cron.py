@@ -16,9 +16,11 @@ os.makedirs("logs", exist_ok=True)
 result = requests.get(
     f"{settings.OTLPLUS_BASE_URL}/defaultSemester", headers=headers
 ).json()
-semesters = [(result["year"], result["semester"])]
+last_semester = (result["year"], result["semester"])
+semesters = [last_semester]
 
-def put_previous_semester(semesters, count):
+
+def put_previous_regular_semester(semesters, count):
     if count == 0:
         return
     year, semester = semesters[-1]
@@ -30,10 +32,23 @@ def put_previous_semester(semesters, count):
     else:
         raise ValueError("Invalid semester: " + semesters[0])
     semesters.append((year, semester))
+    put_previous_regular_semester(semesters, count - 1)
+
+
+def put_previous_semester(semesters, count):
+    if count == 0:
+        return
+    year, semester = semesters[-1]
+    if semester == 1:
+        year -= 1
+        semester = 4
+    else:
+        semester -= 1
+    semesters.append((year, semester))
     put_previous_semester(semesters, count - 1)
 
 
-put_previous_semester(semesters, 1)
+put_previous_regular_semester(semesters, 1)
 
 
 def save_log(filetype, data):
@@ -47,7 +62,7 @@ def save_log(filetype, data):
         num += 1
 
     # Write data to file
-    with open(filename, "w", encoding='utf8') as file:
+    with open(filename, "w", encoding="utf8") as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
 
 
@@ -107,6 +122,9 @@ for year, semester in semesters:
         print(e)
         print(result)
         print(result.text)
+
+semesters = [last_semester]
+put_previous_semester(semesters, 3)
 
 for year, semester in semesters:
     try:
