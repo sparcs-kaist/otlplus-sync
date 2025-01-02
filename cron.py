@@ -66,7 +66,7 @@ def save_log(filetype, data):
         json.dump(data, file, indent=4, ensure_ascii=False)
 
 
-for year, semester in semesters:
+for year, semester in reversed(semesters):
     try:
         lectures = get.get_lecture_type(lecture_year=year, lecture_term=semester)
         charges = get.get_charge_type(lecture_year=year, lecture_term=semester)
