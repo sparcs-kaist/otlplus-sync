@@ -90,11 +90,6 @@ for year, semester in semesters:
 
     try:
         classtimes = get.get_time_type(lecture_year=year, lecture_term=semester)
-        for classtime in classtimes:
-            teaching = classtime["room_k_name"]
-            classtime["room_k_name"] = classtime["room_e_name"]
-            classtime["room_e_name"] = classtime["teaching"]
-            classtime["teaching"] = teaching
 
         result = requests.post(
             f"{settings.OTLPLUS_BASE_URL}/classtime",
@@ -126,9 +121,14 @@ for year, semester in semesters:
 semesters = [last_semester]
 put_previous_semester(semesters, 3)
 
+print("takenlecture for", semesters)
+
 for year, semester in semesters:
     try:
         attend = get.get_attend_type(lecture_year=year, lecture_term=semester)
+
+        print("got attend")
+        print(len(attend))
 
         result = requests.post(
             f"{settings.OTLPLUS_BASE_URL}/takenLecture",
