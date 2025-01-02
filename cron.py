@@ -48,7 +48,7 @@ def put_previous_semester(semesters, count):
     put_previous_semester(semesters, count - 1)
 
 
-put_previous_regular_semester(semesters, 1)
+put_previous_semester(semesters, 3)
 
 
 def save_log(filetype, data):
