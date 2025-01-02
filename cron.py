@@ -127,9 +127,6 @@ for year, semester in semesters:
     try:
         attend = get.get_attend_type(lecture_year=year, lecture_term=semester)
 
-        print("got attend")
-        print(len(attend))
-
         result = requests.post(
             f"{settings.OTLPLUS_BASE_URL}/takenLecture",
             json={"year": year, "semester": semester, "attend": attend},
