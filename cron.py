@@ -67,6 +67,7 @@ def save_log(filetype, data):
 
 
 for year, semester in reversed(semesters):
+    print(year, semester)
     try:
         lectures = get.get_lecture_type(lecture_year=year, lecture_term=semester)
         charges = get.get_charge_type(lecture_year=year, lecture_term=semester)
@@ -124,6 +125,7 @@ put_previous_semester(semesters, 3)
 print("takenlecture for", semesters)
 
 for year, semester in semesters:
+    print(year, semester)
     try:
         attend = get.get_attend_type(lecture_year=year, lecture_term=semester)
 
