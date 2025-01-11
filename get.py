@@ -17,6 +17,7 @@ def _get(url: str):
     response = requests.get(
         f"{settings.SCHOLAR_BASE_URL}{url}",
         headers=headers,
+        verify=False,
     )
     response.encoding = "utf-8"
     return response.json()
@@ -86,3 +87,6 @@ def get_report_e_degree_k(student_no: str = None):
 
 def get_kds_students_other_major():
     return _get("/kds_students_other_major")["OutBlock_1"]
+
+def get_view_kds_students_other_major():
+    return _get("/view_kds_students_other_major")["OutBlock_1"]
